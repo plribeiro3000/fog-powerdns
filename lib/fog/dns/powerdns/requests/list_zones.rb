@@ -40,7 +40,6 @@ module Fog
               :path     => "/servers/#{server}/zones"
           ).body
         end
-
       end
     end
   end

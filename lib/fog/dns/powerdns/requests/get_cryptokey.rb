@@ -30,7 +30,6 @@ module Fog
               :path     => "/servers/#{server}/zones/#{zone}/cryptokeys/#{cryptokey}"
           ).body
         end
-
       end
     end
   end

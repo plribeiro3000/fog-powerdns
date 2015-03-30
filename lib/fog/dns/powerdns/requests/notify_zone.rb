@@ -2,15 +2,16 @@ module Fog
   module DNS
     class PowerDNS
       class Real
-        # Modify a single zone in PowerDNS
+        # DNS Notify all slaves of the zone
+        # Authoritative only, zone must be set up as master
+        # or slave (fails otherwise)
         #
         # ==== Parameters
-        # server<~String> - server id
-        # zone<~String> - zone id
-        # options<~Hash> - pairs enumerated below
-        #
+        # * server<~String> - server id
+        # * zone<~String> - zone name
         #
         # ==== Returns
+        # TODO: Untested
         # * response<~Excon::Response>:
         #   * body<~Hash>:
         #     * 'id': <~String>,
@@ -35,18 +36,12 @@ module Fog
         #     * 'comments': <~Array>,
         #   * status<~Integer>  200 when successful
 
-        def update_zone(server, zone, options = {})
-
-          options.each { |option, value|
-            body[option] = value;
-          }
-
+        def notify_zone(server, zone)
           request(
-              :body     => Fog::JSON.encode(body),
               :expects  => 200,
               :method   => 'PUT',
-              :path     => "/servers/#{server}/zones/#{zone}"
-          ).body
+              :path     => "/servers/#{server}/zones/#{zone}/notify"
+          )
         end
       end
     end

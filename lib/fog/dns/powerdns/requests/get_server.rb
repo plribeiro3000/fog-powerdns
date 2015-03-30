@@ -26,7 +26,6 @@ module Fog
               :path     => "/servers/#{server}"
           ).body
         end
-
       end
     end
   end

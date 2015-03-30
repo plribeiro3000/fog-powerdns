@@ -2,28 +2,25 @@ module Fog
   module DNS
     class PowerDNS
       class Real
-        # Retrieves server stats
+        # Searches for term in server logs
         #
         # ==== Parameters
         # * server<~String> - server id
+        # * term<~String> - search term
         #
         # ==== Returns
         # * response<~Excon::Response>:
         #   * body<~Array>:
-        #       * statistics<~Hash>:
-        #         * 'type': <~String>,
-        #         * 'name': <~String>,
-        #         * 'value': <~String>
+        #     * log-line<~String>
         #   * status<~Integer> - 200 when successful
 
-        def get_server_stats(server)
+        def search_log(server, term)
           request(
               :expects  => 200,
               :method   => 'GET',
-              :path     => "/servers/#{server}/statistics"
+              :path     => "/servers/#{server}/search-log?q=#{term}"
           ).body
         end
-
       end
     end
   end

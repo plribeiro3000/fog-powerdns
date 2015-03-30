@@ -2,16 +2,16 @@ module Fog
   module DNS
     class PowerDNS
       class Real
-        # Create a single zone in PowerDNS
-        # Server, name and nameservers LIST are required
+        # Retrieves master
+        # Authoritative only, zone must be set up as slave
+        # (fails otherwise)
         #
         # ==== Parameters
-        # * server<~String> - Server ID
-        # * name<~String> - Name of domain
-        # * nameservers<~Array> - List of nameservers
-        # * options<~Hash> - Other options
+        # * server<~String> - server id
+        # * zone<~String> - zone name
         #
         # ==== Returns
+        # TODO: Untested
         # * response<~Excon::Response>:
         #   * body<~Hash>:
         #     * 'id': <~String>,
@@ -36,26 +36,13 @@ module Fog
         #     * 'comments': <~Array>,
         #   * status<~Integer>  201 when successful
 
-        def create_zone(server, name, nameservers, options = {})
-          body = {
-              "name" => name,
-              "nameservers" => nameservers
-          }
-
-          options.each { |option, value|
-            body[option] = value;
-          }
-
+        def retrieve_zone(server, zone)
           request(
-              :body     => Fog::JSON.encode(body),
-              :expects  => 201,
-              :method   => 'POST',
-              :path     => "/servers/#{server}/zones"
-          ).body
+              :expects  => 200,
+              :method   => 'PUT',
+              :path     => "/servers/#{server}/zones/#{zone}/axfr-retrieve"
+          )
         end
-      end
-      class Mock
-        # TODO: Write this
       end
     end
   end

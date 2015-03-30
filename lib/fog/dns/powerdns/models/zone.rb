@@ -1,6 +1,3 @@
-require 'fog/core/model'
-# require 'fog/powerdns/models/dns/rrsets'
-
 module Fog
   module DNS
     class PowerDNS
@@ -15,7 +12,6 @@ module Fog
           true
         end
 
-
         def records
           # TODO: Should rewrite this
           @records ||= begin
@@ -26,14 +22,12 @@ module Fog
           end
         end
 
-
         def save
           requires :zone
           data = service.create_zone(zone).body["zone"]
           merge_attributes(data)
           true
         end
-
       end
     end
   end

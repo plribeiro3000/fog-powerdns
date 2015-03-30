@@ -2,16 +2,15 @@ module Fog
   module DNS
     class PowerDNS
       class Real
-        # Retrieves master
-        # Authoritative only, zone must be set up as slave
-        # (fails otherwise)
+        # Modify a single zone in PowerDNS
         #
         # ==== Parameters
-        # * server<~String> - server id
-        # * zone<~String> - zone name
+        # server<~String> - server id
+        # zone<~String> - zone id
+        # options<~Hash> - pairs enumerated below
+        #
         #
         # ==== Returns
-        # TODO: Untested
         # * response<~Excon::Response>:
         #   * body<~Hash>:
         #     * 'id': <~String>,
@@ -34,16 +33,20 @@ module Fog
         #     * 'recursion_desired': <~Boolean>,
         #     * 'records': <~Array>,
         #     * 'comments': <~Array>,
-        #   * status<~Integer>  201 when successful
+        #   * status<~Integer>  200 when successful
 
-        def retrieve_zone(server, zone)
+        def update_zone(server, zone, options = {})
+          options.each { |option, value|
+            body[option] = value;
+          }
+
           request(
+              :body     => Fog::JSON.encode(body),
               :expects  => 200,
               :method   => 'PUT',
-              :path     => "/servers/#{server}/zones/#{zone}/axfr-retrieve"
-          )
+              :path     => "/servers/#{server}/zones/#{zone}"
+          ).body
         end
-
       end
     end
   end

@@ -28,7 +28,6 @@ module Fog
         #         * 'content': <~String>,
         #         * 'modfied_at': <~Integer>
 
-
         def update_rrsets(server, zone, options = {})
           options.each { |option, value|
             body[option] = value;

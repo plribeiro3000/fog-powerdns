@@ -1,17 +1,20 @@
-require 'fog/powerdns'
-
 module Fog
   module DNS
     class PowerDNS < Fog::Service
+      autoload :Record, File.expand_path('../powerdns/models/record', __FILE__)
+      autoload :Records, File.expand_path('../powerdns/models/records', __FILE__)
+      autoload :Zone, File.expand_path('../powerdns/models/zone', __FILE__)
+      autoload :Zones, File.expand_path('../powerdns/models/zones', __FILE__)
+
       requires :pdns_api_key
       recognizes :host, :port, :persistent, :scheme, :timeout
 
-      model_path 'fog/powerdns/models/dns'
+      model_path 'fog/dns/powerdns/models'
       model       :zone
       collection  :zones
       # collection  :rrsets
 
-      request_path 'fog/powerdns/requests/dns'
+      request_path 'fog/dns/powerdns/requests'
       request :list_servers
       request :get_server
       request :list_server_configs
@@ -42,12 +45,6 @@ module Fog
           @persistent = options[:persistent]|| false
           @port       = options[:port]      || 8081
           @scheme     = options[:scheme]    || 'http'
-          puts @api_key
-          puts @persistent
-          puts @connection_options
-          puts @scheme
-          puts @host
-          puts @port
           @connection = Fog::XML::Connection.new("#{@scheme}://#{@host}:#{@port}", @persistent, @connection_options)
         end
 

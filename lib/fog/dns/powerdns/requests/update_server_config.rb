@@ -29,7 +29,6 @@ module Fog
             puts 'Only allows_from config is allowed.'
           end
         end
-
       end
     end
   end

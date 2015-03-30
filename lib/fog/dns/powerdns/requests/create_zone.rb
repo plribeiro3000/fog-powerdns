@@ -2,10 +2,14 @@ module Fog
   module DNS
     class PowerDNS
       class Real
-        # Get details of a DNS zone
+        # Create a single zone in PowerDNS
+        # Server, name and nameservers LIST are required
         #
         # ==== Parameters
-        # * zone<~String> - Zone id
+        # * server<~String> - Server ID
+        # * name<~String> - Name of domain
+        # * nameservers<~Array> - List of nameservers
+        # * options<~Hash> - Other options
         #
         # ==== Returns
         # * response<~Excon::Response>:
@@ -30,16 +34,25 @@ module Fog
         #     * 'recursion_desired': <~Boolean>,
         #     * 'records': <~Array>,
         #     * 'comments': <~Array>,
-        #   * status<~Integer>  200 when successful
+        #   * status<~Integer>  201 when successful
 
-        def get_zone(server, zone)
+        def create_zone(server, name, nameservers, options = {})
+          body = {
+              "name" => name,
+              "nameservers" => nameservers
+          }
+
+          options.each { |option, value|
+            body[option] = value;
+          }
+
           request(
-              :expects  => 200,
-              :method   => 'GET',
-              :path     => "/servers/#{server}/zones/#{zone}"
+              :body     => Fog::JSON.encode(body),
+              :expects  => 201,
+              :method   => 'POST',
+              :path     => "/servers/#{server}/zones"
           ).body
         end
-
       end
     end
   end
